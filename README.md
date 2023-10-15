@@ -4,4 +4,4 @@ Please fork this repository, make edits in your branch, and make pull requests!
 
 
 When I wrote this code, only god and I understood what it did.
-Now… only god knows.
+Now only god knows.
