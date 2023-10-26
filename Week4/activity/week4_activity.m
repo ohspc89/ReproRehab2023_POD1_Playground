@@ -165,18 +165,20 @@ while idx <= length(interimVarnames)
             idx = idx + 3;
 %           2-1B) if the number is greater than 2,
         elseif numEmpty > 2
-%               2-1A-1) add '_RX' to the current name and set it as
+%               2-1B-1) add '_RX' to the current name and set it as
 %                       the name of the current column.
             viconOutput2.Properties.VariableNames{viconidx} = [interimVarnames{idx}, '_RX'];
-%               2-1A-2 ~ 9) add one of ['_RY', '_RZ', '_TX', '_TY', '_TZ',
+%               2-1B-2 ~ 9) add one of ['_RY', '_RZ', '_TX', '_TY', '_TZ',
 %                           '_SX', '_SY', '_SZ'] to the current name and set
 %                           that as the name of the following columns.
             suffix = {'_RY', '_RZ', '_TX', '_TY', '_TZ', '_SX', '_SY', '_SZ'};
 %%%%%%%%%%            
 % Q6. Can you try using a for loop to finish the task?
 %%%%%%%%%%
-            for % A6a HERE: need to specify a new index (eg. ii) and its range.
-                % A6b HERE: write the command to do what's outlined in 2-1A-2.
+            for % A6a HERE: specify a new index (eg. ii) and its range.
+                % A6b HERE: attach the ii-th suffix to the current variable
+                % name and save it as a new variable name (2-1B-2 ~ 9).
+                % Refer to 2-1A-1, 2-1A-2, or 2-1A-3 to write the code.
             end
             % and we will skip the index by 8!
             idx = idx + 9;
