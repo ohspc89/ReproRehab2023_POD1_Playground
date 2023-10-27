@@ -41,6 +41,43 @@ end
 % that feature.
 % (fullfile is used in S2_Combine_Adaptation_Data.m)
 
+% tip 3: think about how a parameter value is used within a function.
+% In lines 36, `True_Parameters` is defined as a 16-by-4 array.
+% It is later updatedted inside a for-loop (line 93).
+% The loop iterates from 1 to `N_Participants`, which is the parameter
+% value you provide. By now you learned that in order to run a function
+% that requires a parameter value, you need to run like this:
+%
+% >> S1_Simulate_Adaptation_Data(N_Participants)
+%
+% If N_Participants=20, what happens?
+% You don't see an error. MATLAB quickly adds extra 4 rows
+% What if N_Participants=100? 1,000,000? Would the process still be quick?
+% Let's see the example here:
+n_iter = 1000000;   % number of iteration
+tic     % tic/toc is a useful function to measure processing time
+x = zeros(1);
+for k = 2:n_iter
+    x(k) = x(k-1) + 5;
+end
+toc
+% On my computer, this iteration takes near 0.3 seconds.
+% If you make the size of x equal to the number of iterations,
+% it will take less.
+tic
+x = zeros(1,n_iter);
+for k=2:n_iter
+    x(k) = x(k-1) + 5;
+end
+toc
+% Now the elapsed time reduces by about 1/10.
+% If you're interested in learning more, please refer to:
+% https://www.mathworks.com/help/matlab/matlab_prog/preallocating-arrays.html
+%
+% So if `N_Participants` is LARGE, it may take a while for the function to
+% finish. The key is, you better define the dimension of `True_Parameters`
+% according to the number of iteration, which is again, N_Participants.
+
 %% Tips for S3_Summarize_Adaptation_Data.m
 % In line 15, Dr. Finley uses `function handle`
 % 15|   Double_Exp_Model = @(Coeff,x)Coeff(1)*exp(-Coeff(2)*x(:,1) + ...
