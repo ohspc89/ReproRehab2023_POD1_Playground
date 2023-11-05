@@ -23,13 +23,13 @@ close all
 %     and later concatenate this path with a .mat file name and provide
 %     it to `fullfile`.
 
-%----------------------------------------------------------------------
-% Q0. Please define the variable `dirpath` by providing the path
-%     to the correct directory. An example can be:
-%     dirpath = 'C:\Users\joh\Downloads\All_Subjects';
+%% Q0.Tell MATLAB which folder to look for---------------------------------
+% Please define the variable `dirpath` by providing the path
+% to the correct directory. An example can be:
+% dirpath = 'C:\Users\joh\Downloads\All_Subjects';
 dirpath = 
 
-
+%% Memory preallocation related job----------------------------------------
 % Preallocate space to store the average joint angle trajectories for each
 % partcipant. Note that there are 12 joints angles, each is
 % time-normalized to 101 points, and we have data from 50 participants.
@@ -39,8 +39,7 @@ dirpath =
 % Avg_Joint_Angles_Ascend = zeros(12,101,50);
 % Avg_Joint_Angles_Descend = zeros(12,101,50);
 
-% JO: The original code, both here (lines 34-38) and in the for-loop below,
-%     prepares a matrix for each task. 
+% JO: The original code prepares five separate matrix arrays. 
 %     We can practice a different approach - making a structure
 %     and generate a `field` for a task.
 %     Generating fields and assigning a zero matrix is a
@@ -54,13 +53,13 @@ STUDYTASK = ["Walking", "HeelWalking", "ToeWalking", "Ascend", "Descend"];
 % JO: Prepare a structure
 Avg_Joint_Angles = struct();
 
-%----------------------------------------------------------------------
-% Q1. Please write a for-loop whose total number of iteration will
-%     be identical to the length of the string array: STUDYTASK.
-%     Inside the loop, you will
-%       1) generate fields whose names are prepared in the STUDYTASK array
-%       2) assign initmat to each field
-%     The two tasks can be done in a SINGLE line of code.
+%% Q1. Write a for loop to generate fields of a struct---------------------
+% Please write a for-loop whose total number of iteration will
+% be identical to the length of the string array: STUDYTASK.
+% Inside the loop, you will
+%   1) generate fields whose names are prepared in the STUDYTASK array
+%   2) assign initmat to each field
+% The two tasks can be done in a SINGLE line of code.
 for
     % JO: 1) Generate/access a field using the dot operator.
     %        Call the name of the field immediately after
@@ -77,7 +76,7 @@ for
     %     
 end
 
-
+%% Prepare a figure--------------------------------------------------------
 % Move to the directory where the data are stored
 % cd('All_Subjects')
 
@@ -91,6 +90,7 @@ set(f1,'NumberTitle','off','Name','Manuscript Figure 3')
 % each of the 50 participants are loaded. 
 %--------------------------------------------------------------------------
 
+%% Nested for loops--------------------------------------------------------
 for Subj = 1:50
 
     % Load each participant's data
@@ -301,6 +301,7 @@ for Subj = 1:50
     end
 end
 
+%% Make a field to store metadata: names of the joints---------------------
 % JO: Have a metadata field to store the names of the joints.
 Avg_Joint_Angles.Ang = angNamesInCell;
 
@@ -309,3 +310,4 @@ Avg_Joint_Angles.Ang = angNamesInCell;
 % tasks to a file called "Avg_Joint_Ankles
 % R5. Please save the entire structure `Avg_Joint_Angles` as a .mat file.
 % ------------------------------------------------------------------------
+save(...)
