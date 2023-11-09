@@ -113,7 +113,6 @@ grpstats(groupTable, 'group', 'iqr');
 
 % If you want to calculate the statistics for a subset of variables
 grpstats(groupTable, 'group', 'median', 'DataVars',["pre", "post"]);
-grpstats(groupTable, 'group', 'median', 'DataVars',["post", "onemonth"])
 
 % Compare with the code using varfun:
 varfun(@median, groupTable, 'GroupingVariables','group','InputVariables',["pre", "post"]);
