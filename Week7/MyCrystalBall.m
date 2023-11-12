@@ -204,29 +204,41 @@ function myAnswer = MyCrystalBall(tbl, varargin)
                 if ...
                     ...
                 else
-                    % subset is a subsetted table using row&column indices
+                    % `subset` is a subset of tbl defined by 
+                    % the user provided row and column indices
                     subset = tbl(p.Results.rowindex, p.Results.colindex);
-                    % subGroupVar is a categorical variable of subset.
+                    % subGroupVar is a categorical variable of `subset`.
                     % For example, let's suppose that tbl has one categorical
                     % variable, 'id'. You index this variable by:
                     %   tbl.id OR tbl.('id')
-                    % Previously we defined userGString and its value is 'id'.
+                    % Previously we defined userGString as the value of
+                    % the function parameter, 'groupby', which is a 'char'
+                    % array ('id' in the line below).
+                    % >> MyCrystalBall(tbl, 'rowindex', 1:4, 'groupby', 'id')
                     % So tbl.(userGString) = tbl.('id') = tbl.id
-                    % Let's also suppose that the id column of tbl is a
+
+                    % Let's also suppose that the 'id' column of tbl is a
                     % categorical variable with six entries: 4 A's and B's.
-                    % If subset is tbl(1:4, :) tbl.(userGstring) should be
-                    % shorted in length. That is what's meant by
+                    % From the example use of MyCrystalBall, we can guess
+                    % that `subset` is tbl(1:4, :), a subset with the first
+                    % four rows of tbl. This subset's 'id' column should be
+                    % tbl.('id')(1:4) accordingly. Can you now understand
+                    % why the first argument for `categorical` is this:
                     %   tbl.(userGString)(p.Results.rowindex)
                     % The second part, 
-                    %   unique(tbl.(userGString)(p.Results.rowindex)
+                    %   unique(tbl.(userGString)(p.Results.rowindex))
                     % has to do with the use of `categorical` function.
                     % You can refer to line 84 of Week6_activity.m
                     subGroupVar = categorical(tbl.(userGString)(p.Results.rowindex),...
                             unique(tbl.(userGString)(p.Results.rowindex)));
                     % unique values of subGroupVar
                     subGroupVarLabels = unique(subGroupVar);
-                    % If no grouping variable column is in subset,
-                    % add it to the subset table.
+                    % If no grouping variable in subset,
+                    % add it to the subset table. The TWO scenarios where
+                    % the condition here is not met will be either 1) user
+                    % did not provide a value for 'colindex' or 2) the value
+                    % of 'colindex' argument involves the index of the
+                    % groupving variable (column) of tbl.
                     if ~contains(userGString, subset.Properties.VariableNames)
                         subset.(userGString) = subGroupVar;
                         % Bring userGString column to the left
@@ -241,9 +253,46 @@ function myAnswer = MyCrystalBall(tbl, varargin)
                     mem = ...;
                     % Nested for loop again! Hooray!
                     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-                    % T5g. Write a nested for-loop that replaces these lines.
-                    % Let's also suppose that subsetBy is a 3 x 2 table.
-                    %
+                    % T5g. Write a nested for-loop to replace these lines.
+
+                    % The nested for loop first takes a subset of `subset`,
+                    % `subsetBy`. `subsetBy` has row values of the same
+                    % grouping variable value. For example, if `subset` was
+                    % like this and the {'groupby', 'id'} was provided,
+
+                    % >> subset
+                    % id    Var1    Var2
+                    % ---   ----    ----
+                    %  1     2.3     4.5
+                    %  1     8.9     6.5
+                    %  1     9.8    11.2
+                    %  2     7.4     6.4
+                    %  2     4.5     7.7
+
+                    % The first `subsetBy` is the rows of `subset` whose
+                    % grouping variable, 'id' is equal to the first
+                    % element of the categorical variable, 'id', or 1.
+
+                    % >> subsetBy
+                    % id    Var1    Var2
+                    % ---   ----    ----
+                    %  1     2.3     4.5
+                    %  1     8.9     6.5 
+                    %  1     9.8    11.2
+
+                    % Then the 'nested' loop will iteratively fill cells
+                    % of the matrix `mem`. Each row of `mem` will store
+                    % summary statistics of the variables of `subsetBy`.
+                    % When all statistics are calculated and filled the
+                    % zeros of one row of `mem`, you prepare another
+                    % `subsetBy`, whose rows are the rows of `subset` where
+                    % 'id' is equal to the SECOND element of 'id' or 2.
+
+                    % Your nested for-loop will replace these lines below.
+                    % These lines are describing what happens when `subset`
+                    % has three 'id' values (ex. 'A', 'B', 'C') and two
+                    % other variables (ex. 'Var1', 'Var2').
+                    
                     % subsetBy = subset(subset.(userGString) == ...
                     %   subGroupVarLabels(1*), 2:end);
                     % mem(1*, 1**) = summaryfnc(table2array(subsetBy(:, 1**)));
@@ -252,6 +301,10 @@ function myAnswer = MyCrystalBall(tbl, varargin)
                     %   subGroupVarLabels(2*), 2:end);
                     % mem(2*, 1**) = summaryfnc(table2array(subsetBy(:, 1**)));
                     % mem(2*, 2**) = summaryfnc(table2array(subsetBy(:, 2**)));
+                    % subsetBy = subset(subset.(userGString) == ...
+                    %   subGroupVarLabels(3*), 2:end);
+                    % mem(3*, 1**) = summaryfnc(table2array(subsetBy(:, 1**)));
+                    % mem(3*, 2**) = summaryfnc(table2array(subsetBy(:, 2**)));
 
                     % '*' marks the first loop index. Define it as 'level'
                     % '**' marks the second loop index. Define it as 'col'
