@@ -2,6 +2,9 @@
 % Written by Devin Austin and Jinseok Oh
 % for ReproRehab POD1 learners, 11/13/23
 
+clear all
+clc
+
 % We will practice writing functions and look at
 % different features you may find useful.
 
@@ -19,7 +22,7 @@
 %% varargin: the name is ORIGINAL
 % Point 1 requires you to use lowercase characters. This means that
 % only 'varargin', not 'Varargin', 'varArgin', or any other variation
-% of 'varargin' will be recognized by MATLAB. Test if for yourself
+% of 'varargin', will be recognized by MATLAB. Test if for yourself
 % by running the two lines below:
 
 varargin    % This will return nothing
@@ -43,12 +46,12 @@ varArgin    % This will return the error msg
 % and returns the string:
 %   '{x} and {length(varargin)} more variables provided'
 %
-% `varargin` is supposed to take ANY number of inputs. Now MATLAB notices
+% `varargin` is supposed to take ANY number of inputs. MATLAB notices
 % that there's another input `x` after `varargin`. It simply cannot
-% distinguish the last argument of the input for `varargin` from that
-% for `x`! Hence, it treats `varargin` as an input of length 1.
+% distinguish the last input for `varargin` from the input for `x`! 
+% Hence, it treats `varargin` as an input of length 1.
 
-% So one may wish the output of this command to be:
+% Do you think the output of this line will be the following?
 %   'hello and 4 more variables provided'
 % Check it for yourself!
 returnResponseWrong('mind', 2, 'me', 1, 'hello')
@@ -75,18 +78,18 @@ returnResponseRight('mind', 2, 'me', 1, 'hello', 22)
 % It puts all input arguments into a **cell** array. Ring a bell?
 % Please check line 6 (and the rest) of accessVarArgIN.m and guess
 % what will be the output when you run these lines.
-% Change `argidx`, too!
+% Try changing the value of `argidx` as well and rerun this section!
 argidx = 3;
 accessVarArgIN(argidx, 'can', 'you', 'guess', 'which', 'character', 'output',...
     'is', 'going', 'to', 'be', 'returned', '?')
 
 
 %% Throwing an error message
-% When people misuse your function, you should PUNISH them!
+% When people misuse your function, you should (gently) WARN them!
 % Please check line 2-3 of accessVarArgIN.m and see how `error()` is used.
 % 
 % An error message can help users more by reminding them their mistakes.
-% Can you comment line 3 & uncomment line 4 of the original function file, 
+% Can you comment line 3, uncomment line 4 of the original function file, 
 % save it, and run the line below?
 % 
 % Can you check what is the type you provided for the 'index' of
@@ -95,10 +98,10 @@ accessVarArgIN('SECOND', 'now', 'you', 'will', 'read', 'the', 'error',...
     'message!')
 
 % You now can even set an error message!
-% What else do you need to be afraid of about MATLAB?
+% What else in MATLAB do you need to be afraid of?
 
 
-%% How to pre-define optional arguments
+%% How to pre-define optional arguments: Background
 % Remember how `varfun()` had optional arguments such as
 % 'InputVariables' or 'GroupingVariables'?
 %
@@ -108,8 +111,8 @@ accessVarArgIN('SECOND', 'now', 'you', 'will', 'read', 'the', 'error',...
 % to specify optional parameter name/value pairs to control how varfun
 % uses the variables in A and how it calls FUN.
 %
-% How does `varfun` know if a user provides 'PARAM1', val1, 'PARAM2', val2,
-% and so on?
+% How does `varfun()` know if a user provides 'PARAM1', val1,...
+% 'PARAM2', val2, and so on?
 % Please run the line below and check the very first line
 edit varfun
 
@@ -117,20 +120,24 @@ edit varfun
 %
 %   function b = varfun(fun,a,varargin)
 %
-% So you use varargin to take in all these optional inputs, and CHECK
-% if inputs are in the order you expect.
-% But wait, how do you check? This is possible when you use `inputParser`.
+% So anything after the two arguments, `fun`(a function to apply) and 
+% `a` (a table where the function will be applied), additional input 
+% will all be put inside `varargin`, a cell array.
+% `varfun()` will later 'parse' this cell array.
+% 
+% This parsing is possible through `inputParser`.
 
-% Devin introduces this when he goes over Week6 activity,
-% and in this activity you will learn and implement the feature by yourself.
+% Devin introduces this when he goes over Week6 activity.
 % For reference, you can check this page:
 % https://www.mathworks.com/help/matlab/matlab_prog/parse-function-inputs.html
 
+
+%% How to pre-define optional arguments: Practice
 % Let's revisit 'PlotSignificantDifference.m' of Week6.
 % In summary, you have 6 'Required' inputs and `varargin`,
 % the last input of the function.
 % Let's simulate what is happening inside the function, using
-% `SimplifiedFunction.m`, a function I prepared using Devin's code.
+% `SimplifiedFunction.m`, a function based on Devin's code snippet.
 % This function takes exactly the same inputs as 
 % `PlotSignificantDifference` function does and returns the inputParser p.
 %
@@ -147,8 +154,8 @@ pValue = 0.001;
 % Let's suppose we're not providing them for now.
 % When using `SimplifiedFunction`, the command will be like:
 %   SimplifiedFunction(Axis, X1, X2, Y, Height, pValue)
-% with no value for `varargin`. This will make `varargin` an
-% empty cell array (refer to line 75!!)
+% with no value for `varargin`. This is equal to setting `varargin` 
+% an empty cell array (refer to line 75!!)
 varargin={};
 % pre-defined values of 'Symbol', and 'alpha'
 defaultSymbol = '*';
@@ -174,7 +181,7 @@ addOptional(p, 'alpha', defaultAlpha);
 
 % If you run this line, you are generating `fields` of a `struct`,
 % p.Results.
-parse(p,Axis,X1,X2,Y,Height,pValue,varargin{:}); 
+parse(p,Axis,X1,X2,Y,Height,pValue,varargin{:});
 
 % Let's check what are in p.Results
 p.Results
@@ -204,3 +211,133 @@ varargin=...;
 
 % What about another optional input, 'alpha'? What is this value?
 p3.Results.alpha
+
+% Without running these lines, can you guess p4.Results.alpha?
+p4 = SimplifiedFunction(Axis,X1,X2,Y,Height,pValue,'alpha',1e-4);
+p4.Results.alpha
+
+
+%% FINALE - WRITE YOUR OWN FUNCTION
+% Let's write a function to check if you've understood everything!
+% Your task is to complete the script: MyCrystalBall.m
+
+% Your function will be declared in this way:
+%   function myAnswer = MyCrystalBall(tbl, varargin)
+
+% Unfortunately, your crystal ball is not omnipotent and you can ask
+% limited number of questions.
+% Please type below to check details.
+%
+% >> help MyCrystallBall
+
+% Your crystal ball will read a table reading dailyActivity_merged.csv.
+% This is a dataset of FitBit Fitness Tracker Data I downloaded from
+% https://zenodo.org/records/53894
+
+% tbl is a table of 940 rows and 15 columns
+tbl = readtable('dailyActivity_merged.csv');
+
+% The first column, Id, will be a categorical variable
+tbl.Id = categorical(tbl.Id, unique(tbl.Id));
+
+% The second column, ActivityDate, is a `datetime` array.
+% This is the only data type we didn't introduce in our discussions.
+% Please check 'help datetime' later. For this example, we will just
+% drop this column, because it just confuses you...
+tbl = removevars(tbl, "ActivityDate");
+
+% Now, see if your crystal ball can answer your questions
+% Remember, tbl is now a 940 x 14 table.
+
+% Q0. A simple test - are these lines behaving as expected?
+MyCrystalBall(tbl);
+
+% Q1. This should return a 2x14 table
+%
+%     Id        TotalSteps    ...
+% ----------    ----------   -----
+% 1503960366       13162     ...
+% 8877689391        4790     ...
+ans1 = MyCrystalBall(tbl, 'rowindex', [1, 930]);
+ans1
+
+% Let's test error messages under different scenarios
+% Q2a. This should return a custom error message:
+%   '3 incorrect row indices were provided'
+MyCrystalBall(tbl, 'rowindex', [2, 40, 0, 990, 1100]);
+
+% Q2b. This time it's column related message:
+%   '2 incorrect column indices were provided'
+MyCrystalBall(tbl, 'colindex', {'TotalSteps', 'ReproRehab', 'POD1'})
+
+% Q2c. Finally, both row and column related message:
+%   ' 3 incorrect row and indices and
+%     2 incorrect column indices were provided'
+MyCrystalBall(tbl, 'rowindex', [2, 40, 0, 990, 1100], ...
+    'colindex', [0, 16])
+
+% Q3. A column index can be of different formats: `char` or `double`
+% These two line are identical interms of what they return
+MyCrystalBall(tbl, 'colindex', 2)
+MyCrystalBall(tbl, 'colindex', 'TotalSteps')
+
+% Q4. Multiple character indices can be provided too.
+MyCrystalBall(tbl, 'colindex', {'TotalSteps', 'TotalDistance'})
+
+% Getting summary statistics in different scenarios
+% Q5a. statistics of only certain columns, without a grouping variable
+%
+% Expected result is a 1x2 table:
+%
+%   TotalSteps      TotalDistance
+%   ----------      -------------
+%     7637.9            5.4897
+ans2 = MyCrystalBall(tbl, 'summary', 'mean', 'colindex',...
+    {'TotalSteps', 'TotalDistance'});
+ans2
+
+% Q5b. statistics of certain columns and rows, without a grouping variable
+%
+% Expected result is a 1x2 table:
+%
+%   TotalSteps      TotalDistance
+%   ----------      -------------
+%     7050.1            4.822
+ans3 = MyCrystalBall(tbl, 'summary', 'mean', 'colindex',...
+    {'TotalSteps', 'TotalDistance'}, 'rowindex', [1:10, 30:80]);
+ans3
+
+% Q5c. statistics of certain rows without a grouping variable
+%      can you explain why tbl(:, 2:end), not tbl is provided?
+%
+% Expected result is a 1x13 table:
+%
+%   TotalSteps   TotalDistance  TrackerDistance   ...
+%   ----------   -------------  ---------------  -----
+%      7546          5.22             5.22        ...
+ans4 = MyCrystalBall(tbl(:, 2:end), 'summary', 'median', 'rowindex', 1:100);
+ans4
+
+% Q5d. statistics with everything specified.
+%
+% Expected result is a 19x3 table:
+%
+%       Id      TotalSteps  TotalDistance     ...
+%   ----------  ----------  ---------------  -----
+%   1503960366    3052.5        1.9842        ...
+%   1624580081      6177        4.7962        ...
+%       ...         ...           ...         ...
+MyCrystalBall(tbl, 'summary', 'std', 'groupby', 'Id', 'colindex',...
+    {'TotalSteps', 'TotalDistance'}, 'rowindex', [1:100, 300:500, 600:780])
+
+% Basically, the reult should be similar to the output of these lines.
+subset = tbl([1:100, 300:500, 600:700], {'Id', 'TotalSteps', 'TotalDistance'});
+grpstats(subset, 'Id', 'std')
+
+% Extra: if your 'groupby' is not categorical, your crystal ball should
+% spit an error
+MyCrystalBall(tbl, 'summary', 'std', 'groupby', 'TotalSteps')
+
+% Extra 2: if you provide 'groupby' but not 'summary', do you see an error?
+% If not, can you explain why?
+MyCrystalBall(tbl, 'groupby', 'Id')
