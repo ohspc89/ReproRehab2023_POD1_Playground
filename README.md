@@ -59,7 +59,7 @@ using `cellfun` with function handles to apply changes to multiple items of a ce
 
 writing a for-loop to run an iterative job.
 
-Week 5: Visualization in MATLB
+Week 5: Visualization in MATLAB
 ------
 - Learning how to visualize data in MATLAB
 - Configuring plots by setting parameters in advance
