@@ -92,5 +92,15 @@ _activity_ : complete a MATLAB function script to pass test cases;
             the activity also introduced different tips discussed
             in the previous weeks.
 
+TA Tutorial: Tips for writing functions
+------
+This tutorial is prepared using MATLAB's Live Scripts (.mlx). Subtopics are:
+
+- Global variables: what are they and how are they used
+- Workspaces: what are they and how to work with different workspaces
+- Different types of functions: nested, anonymous, & local
+- Ways to handle errors
+
+
 All questions related to each week's content or activity will be directed to
 Devin Austin (austid@udel.edu) or Jinseok Oh (joh@chla.usc.edu)
